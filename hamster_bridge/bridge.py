@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 
 try:
     import hamster.client
-except ImportError:
-    raise ImportError('Can not find hamster')
+except ImportError as ie:
+    raise ImportError('Cannot import hamster, cause: {}'.format(ie))
 
 
 def _combine_configs(*configs):
