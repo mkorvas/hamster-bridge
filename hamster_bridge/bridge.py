@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import datetime
 import time
 import logging
@@ -21,12 +21,12 @@ def _combine_configs(*configs):
     will overwrite the earlier values.
     Returns a RawConfigParser() instance.
     """
-    result = ConfigParser.RawConfigParser()
+    result = configparser.RawConfigParser()
     for config in configs:
         for section in config.sections():
             try:
                 result.add_section(section)
-            except ConfigParser.DuplicateSectionError:
+            except configparser.DuplicateSectionError:
                 # Ignore it. We simply want to include all sections from
                 # the source configs
                 pass
@@ -63,8 +63,8 @@ class HamsterBridge(hamster.client.Storage):
         :type config_path:  str
         """
         path = os.path.expanduser(config_path)
-        config = ConfigParser.RawConfigParser()
-        sensitive_config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
+        sensitive_config = configparser.RawConfigParser()
         # read from file if exists
         if os.path.exists(path):
             logger.debug('Reading config file from %s', path)
@@ -74,7 +74,7 @@ class HamsterBridge(hamster.client.Storage):
             logger.debug('Configuring listener %s', listener)
             listener.configure(config, sensitive_config)
         # save to file
-        with open(path, 'wb') as configfile:
+        with open(path, 'w', encoding='UTF-8') as configfile:
             logger.debug('Writing back configuration to %s', path)
             if self.save_passwords:
                 all_configs = _combine_configs(config, sensitive_config)
